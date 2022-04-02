@@ -11,7 +11,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-
+import java.util.Calendar;
 
 
 /**
@@ -32,48 +32,44 @@ public class Calculate
      * @param mol 需要的物质的量
      * @return
      */
-    public double timeByMol(int port, double mol) throws IOException, ParserConfigurationException, SAXException {
+    public double timeByMol(int port, double mol) throws IOException, ParserConfigurationException, SAXException
+    {
+        double molarMass = 0;
+        double density = 0;
+
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
 
-        File f = new File(path);
-        Document doc = builder.parse(f);
+        Document doc = builder.parse("src/com/sal/Calculate/MSDS.xml");
+        NodeList list = doc.getElementsByTagName("CAS");
 
-        Element ele = doc.getDocumentElement();
+        for (int i = 0; i < list.getLength(); i++)
+        {
+            molarMass = Double.valueOf(doc.getElementsByTagName("molarmass").item(i).getFirstChild().getNodeValue());
+            density = Double.valueOf(doc.getElementsByTagName("density").item(i).getFirstChild().getNodeValue());
+        }
 
-        String unit = String.valueOf(ele.getElementsByTagName("CAS"));
-
-        System.out.println(unit);
+        System.out.println(molarMass);
+        System.out.println(density);
 
         double time = 1;  // 工作时间
         return time;
     }
 
-    public static void element(NodeList list)
-    {
-        for (int i = 0; i < list.getLength(); i++)
-        {
-            Element element = (Element) list.item(i);
-            NodeList childNodes = element.getChildNodes();
-            for (int j = 0; j < childNodes.getLength(); j++)
-            {
-                if (childNodes.item(j).getNodeType() == Node.ELEMENT_NODE)
-                {
-                    System.out.println(childNodes.item(j).getNodeName() + ":");
-                    System.out.println(childNodes.item(j).getFirstChild().getNodeValue());
-                }
-            }
-        }
-    }
+
 
     public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
+//        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//        DocumentBuilder builder = factory.newDocumentBuilder();
+//
+//        Document d = builder.parse("src/com/sal/Calculate/MSDS.xml");
+//        NodeList list = d.getElementsByTagName("CAS");
+
+//       for (int i = 0; i< list.getLength(); i++)
+//       {
+//           System.out.println(d.getElementsByTagName("id").item(i).getFirstChild().getNodeValue());
+//       }
         Calculate c = new Calculate();
-
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-
-        Document d = builder.parse("src/com/sal/Calculate/MSDS.xml");
-        NodeList list = d.getElementsByTagName("CAS");
-        element(list);
+        c.timeByMol(1, 1.0);
     }
 }
