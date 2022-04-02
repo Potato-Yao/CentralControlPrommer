@@ -1,18 +1,13 @@
 package com.sal.Calculate;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
 import java.io.IOException;
-import java.util.Calendar;
-
 
 /**
  * 计算类
@@ -30,7 +25,7 @@ public class Calculate
      * 将物质的量转化为泵工作时间
      * @param port 工作端口
      * @param mol 需要的物质的量
-     * @return
+     * @return 所需的时间
      */
     public double timeByMol(int port, double mol) throws IOException, ParserConfigurationException, SAXException
     {
@@ -48,11 +43,22 @@ public class Calculate
             molarMass = Double.valueOf(doc.getElementsByTagName("molarmass").item(i).getFirstChild().getNodeValue());
             density = Double.valueOf(doc.getElementsByTagName("density").item(i).getFirstChild().getNodeValue());
         }
-
-        System.out.println(molarMass);
-        System.out.println(density);
-
         double time = 1;  // 工作时间
+        time = (mol * molarMass) / (density * POWER);
+        return time;
+    }
+
+    /**
+     * 将物质的量转化为泵工作时间
+     * @param port 端口
+     * @param mol 需要的物质的量
+     * @param concentration 溶液的物质的量浓度
+     * @return 所需的时间
+     */
+    public double timeByMol(int port, double mol, double concentration)
+    {
+        double time = 1;
+        time = mol / (concentration * POWER);
         return time;
     }
 
@@ -70,6 +76,6 @@ public class Calculate
 //           System.out.println(d.getElementsByTagName("id").item(i).getFirstChild().getNodeValue());
 //       }
         Calculate c = new Calculate();
-        c.timeByMol(1, 1.0);
+        System.out.println(c.timeByMol(1, 1.0));
     }
 }

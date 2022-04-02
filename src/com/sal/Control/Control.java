@@ -1,12 +1,12 @@
-package com.sal.Output;
+package com.sal.Control;
 
 /**
- * 打印日志
+ * 控制流程
  * @author Potato Yao
  * @date 2022.3.31
  * @version b0.0.1
  */
-public class logPrinter
+public class Control
 {
 
 }

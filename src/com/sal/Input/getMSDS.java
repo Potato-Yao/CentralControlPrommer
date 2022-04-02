@@ -8,8 +8,4 @@ package com.sal.Input;
  */
 public class getMSDS
 {
-    public static void main(String[] args)
-    {
-
-    }
 }
