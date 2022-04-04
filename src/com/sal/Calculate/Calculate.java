@@ -19,8 +19,6 @@ public class Calculate
 {
     final double POWER = 1;  // 泵的功率，单位毫升/秒
 
-    String path = "src/com/sal/Calculate/MSDS.xml";
-
     /**
      * 将物质的量转化为泵工作时间
      * @param port 工作端口
@@ -29,8 +27,8 @@ public class Calculate
      */
     public double timeByMol(int port, double mol) throws IOException, ParserConfigurationException, SAXException
     {
-        double molarMass = 0;
-        double density = 0;
+        double molarMass = 0;  // 摩尔质量
+        double density = 0;  // 密度
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();

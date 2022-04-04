@@ -1,5 +1,7 @@
 package com.sal.Calculate;
 
+import com.sal.Control.Control;
+
 /**
  * 端口
  * @author Potato Yao
@@ -10,11 +12,30 @@ public class Port
 {
     int portId;  // 端口ID
     String CAS;  // 物质CAS
+    String name;  // 端口名称
 
-    public Port(int portId, String CAS)
+    public Port(int portId, String CAS, String name)
     {
         this.portId = portId;
         this.CAS = CAS;
+        this.name = name;
+    }
+
+    public void informationPrinter()
+    {
+        System.out.println(portId);
+        System.out.println(CAS);
+        System.out.println(name);
+    }
+
+    /**
+     * 将port其放于Control.java的ports中
+     * @param id 索引id
+     * @param port 端口
+     */
+    public static void putPortIntoMap(int id, Port port)
+    {
+        Control.ports.put(id, port);
     }
 
     /**

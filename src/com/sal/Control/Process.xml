@@ -1,5 +1,5 @@
-<process>
-    <p1>
+<Process>
+    <process step="1">
         <port id="1"/>
         <port id="2"/>
         <temperature>
@@ -7,10 +7,10 @@
         </temperature>
         <pressure>
             P
-        </pressure>
+        </pressure>`
         <start>
             port1
             port2
         </start>
-    </p1>
-</process>
+    </process>
+</Process>
