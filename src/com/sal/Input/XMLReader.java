@@ -10,7 +10,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
+import java.io.*;
 
 import com.sal.Control.Control;
 
@@ -57,13 +57,45 @@ public class XMLReader
         }
     }
 
-    public static void processReader(String url) throws IOException, SAXException, ParserConfigurationException
+    /**
+     * 将Process.xml转译为Process
+     * @param processUrl Process文件位置
+     * @param xmlUrl Process.xml文件位置
+     * @throws IOException
+     * @throws SAXException
+     * @throws ParserConfigurationException
+     */
+    public static void processReader(String processUrl, String xmlUrl) throws IOException, SAXException, ParserConfigurationException
     {
+        File process = new File(processUrl);
+        FileOutputStream outputStream = new FileOutputStream(process);
+        OutputStreamWriter writer = new OutputStreamWriter(outputStream, "UTF-8");
+
         // 创建DOM解析器
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
 
-        Document doc = builder.parse(url);
+        Document doc = builder.parse(xmlUrl);
         doc.getDocumentElement().normalize();
+
+        NodeList list = doc.getElementsByTagName("process");
+
+        for (int i = 0; i < list.getLength(); i++)
+        {
+            Node node = list.item(i);
+            if (node.getNodeType() == Node.ELEMENT_NODE)
+            {
+                Element element = (Element) node;
+                int step = Integer.parseInt(element.getAttribute("step"));
+                if (element.getElementsByTagName("temperature").item(0).getTextContent().trim().equals("T"))
+                {
+                    writer.append("tem:AMBIENT\n");
+                }
+                if (element.getElementsByTagName("pressure").item(0).getTextContent().trim().equals("P"))
+                {
+                    writer.append("pre:AMBIENT\n");
+                }
+            }
+        }
     }
 }
