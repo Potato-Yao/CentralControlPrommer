@@ -1,6 +1,8 @@
 package com.sal.Calculate;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -17,7 +19,7 @@ import java.io.IOException;
  */
 public class Calculate
 {
-    final double POWER = 1;  // 泵的功率，单位毫升/秒
+    final static double POWER = 1;  // 泵的功率，单位毫升/秒
 
     /**
      * 将物质的量转化为泵工作时间
@@ -25,22 +27,39 @@ public class Calculate
      * @param mol 需要的物质的量
      * @return 所需的时间
      */
-    public double timeByMol(int port, double mol) throws IOException, ParserConfigurationException, SAXException
+    public static double timeByMol(Port port, double mol) throws IOException, ParserConfigurationException, SAXException
     {
+        String path = "src/com/sal/Calculate/MSDS.xml";
+
+        String CAS = port.getCAS();
+
         double molarMass = 0;  // 摩尔质量
         double density = 0;  // 密度
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
 
-        Document doc = builder.parse("src/com/sal/Calculate/MSDS.xml");
-        NodeList list = doc.getElementsByTagName("CAS");
+        Document doc = builder.parse(path);
+        doc.getDocumentElement().normalize();
+
+        NodeList list = doc.getElementsByTagName("chem");
 
         for (int i = 0; i < list.getLength(); i++)
         {
-            molarMass = Double.valueOf(doc.getElementsByTagName("molarmass").item(i).getFirstChild().getNodeValue());
-            density = Double.valueOf(doc.getElementsByTagName("density").item(i).getFirstChild().getNodeValue());
+            Node node = list.item(i);
+
+            if (node.getNodeType() == Node.ELEMENT_NODE)
+            {
+                Element element = (Element) node;
+                if (CAS.equals(element.getAttribute("cas")))
+                {
+                    molarMass = Integer.valueOf(element.getElementsByTagName("molarmass").item(0).getTextContent().trim());
+                    density = Integer.valueOf(element.getElementsByTagName("density").item(0).getTextContent().trim());
+                }
+            }
         }
+
+
         double time = 1;  // 工作时间
         time = (mol * molarMass) / (density * POWER);
         return time;
@@ -58,22 +77,5 @@ public class Calculate
         double time = 1;
         time = mol / (concentration * POWER);
         return time;
-    }
-
-
-
-    public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
-//        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//        DocumentBuilder builder = factory.newDocumentBuilder();
-//
-//        Document d = builder.parse("src/com/sal/Calculate/MSDS.xml");
-//        NodeList list = d.getElementsByTagName("CAS");
-
-//       for (int i = 0; i< list.getLength(); i++)
-//       {
-//           System.out.println(d.getElementsByTagName("id").item(i).getFirstChild().getNodeValue());
-//       }
-        Calculate c = new Calculate();
-        System.out.println(c.timeByMol(1, 1.0));
     }
 }

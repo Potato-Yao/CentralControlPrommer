@@ -1,5 +1,6 @@
 package com.sal.Input;
 
+import com.sal.Calculate.Calculate;
 import com.sal.Calculate.Port;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -15,7 +16,7 @@ import java.io.*;
 import com.sal.Control.Control;
 
 /**
- * 读取Port.xml和MSDS.xml，Process.xml
+ * 读取Port.xml和MSDS.xml，Process.txt.xml
  * @author Potato Yao
  * @date 2022.4.4
  * @version b0.0.1
@@ -52,7 +53,7 @@ public class XMLReader
                 String name = element.getElementsByTagName("name").item(0).getTextContent().trim();  // 获取name节点的值
                 Port port = new Port(id, CAS, name);  // 将值赋予新的port类
                 port.informationPrinter();
-                Control.ports.put(i, port);
+                Control.ports.put(id, port);
             }
         }
     }
@@ -60,16 +61,16 @@ public class XMLReader
     /**
      * 将Process.xml转译为Process
      * @param processUrl Process文件位置
-     * @param xmlUrl Process.xml文件位置
+     * @param xmlUrl Process.txt.xml文件位置
      * @throws IOException
      * @throws SAXException
      * @throws ParserConfigurationException
      */
     public static void processReader(String processUrl, String xmlUrl) throws IOException, SAXException, ParserConfigurationException
     {
-        File process = new File(processUrl);
-        FileOutputStream outputStream = new FileOutputStream(process);
-        OutputStreamWriter writer = new OutputStreamWriter(outputStream, "UTF-8");
+        BufferedWriter writer = new BufferedWriter(
+                new OutputStreamWriter(
+                        new FileOutputStream(processUrl, true)));
 
         // 创建DOM解析器
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -89,12 +90,15 @@ public class XMLReader
                 int step = Integer.parseInt(element.getAttribute("step"));
                 if (element.getElementsByTagName("temperature").item(0).getTextContent().trim().equals("T"))
                 {
-                    writer.append("tem:AMBIENT\n");
+                    writer.write("tem:AMBIENT\n");
                 }
                 if (element.getElementsByTagName("pressure").item(0).getTextContent().trim().equals("P"))
                 {
-                    writer.append("pre:AMBIENT\n");
+                    writer.write("pre:AMBIENT\n");
                 }
+                writer.close();
+//                var port = Control.ports.get(Integer.valueOf(element.getAttribute("port")));
+//                port.openMotor(Calculate.timeByMol(port, Integer.valueOf(element.getElementsByTagName("start").item(0).getTextContent().trim())));
             }
         }
     }

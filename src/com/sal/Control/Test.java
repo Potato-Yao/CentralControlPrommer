@@ -10,6 +10,6 @@ public class Test
 {
     public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException
     {
-        XMLReader.processReader("src/com/sal/Control/Process", "src/com/sal/Control/Process.xml");
+        XMLReader.processReader("src/com/sal/Control/Process.txt", "src/com/sal/Control/Process.xml");
     }
 }

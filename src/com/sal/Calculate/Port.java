@@ -21,6 +21,11 @@ public class Port
         this.name = name;
     }
 
+    public String getCAS()
+    {
+        return CAS;
+    }
+
     public void informationPrinter()
     {
         System.out.println(portId);

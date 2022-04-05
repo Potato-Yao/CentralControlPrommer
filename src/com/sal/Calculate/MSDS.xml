@@ -1,5 +1,6 @@
 <CAS>
-    <id>64-17-5</id>
-    <molarmass>46.07</molarmass>
-    <density>0.789</density>
+    <chem cas="64-17-5">
+        <molarmass>46.07</molarmass>
+        <density>0.789</density>
+    </chem>
 </CAS>

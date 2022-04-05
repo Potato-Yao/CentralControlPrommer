@@ -1,16 +1,16 @@
 <Process>
     <process step="1">
-        <port id="1"/>
-        <port id="2"/>
         <temperature>
             T
         </temperature>
         <pressure>
             P
         </pressure>`
-        <start>
-            port1
-            port2
+        <start port="1">
+            1
+        </start>
+        <start port="2">
+            1
         </start>
     </process>
 </Process>
