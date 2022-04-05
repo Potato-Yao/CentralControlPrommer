@@ -72,7 +72,7 @@ public class Calculate
      * @param concentration 溶液的物质的量浓度
      * @return 所需的时间
      */
-    public double timeByMol(int port, double mol, double concentration)
+    public static double timeByMol(Port port, double mol, double concentration)
     {
         double time = 1;
         time = mol / (concentration * POWER);
